@@ -51,7 +51,7 @@ typedef struct dictEntry {
         uint64_t u64;
         int64_t s64;
         double d;
-    } v;
+    } v; /* 此处目的节省内存，若val为64位时，则不需要用申请指针所指向的地址了 */
     struct dictEntry *next;
 } dictEntry;
 
@@ -67,10 +67,10 @@ typedef struct dictType {
 /* This is our hash table structure. Every dictionary has two of this as we
  * implement incremental rehashing, for the old to the new table. */
 typedef struct dictht {
-    dictEntry **table;
-    unsigned long size;
-    unsigned long sizemask;
-    unsigned long used;
+    dictEntry **table; /* 哈希表数组 */
+    unsigned long size; /* 哈希表大小 */
+    unsigned long sizemask; /* 哈希表大小掩码，用于计算索引值 */
+    unsigned long used; /* 该哈希表已有节点的数量 */
 } dictht;
 
 typedef struct dict {
